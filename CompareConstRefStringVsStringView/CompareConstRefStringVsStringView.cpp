@@ -10,7 +10,7 @@
 class StopWatch
 {
 public:
-    StopWatch(std::ostream& os = std::cout) : m_os(os)
+    StopWatch()
     {
         m_startPoint = std::chrono::high_resolution_clock::now();
     }
@@ -21,15 +21,8 @@ public:
         return std::chrono::duration_cast<std::chrono::duration<double>>(endPoint - m_startPoint);
     }
 
-    ~StopWatch()
-    {
-        auto endPoint = Stop();
-        m_os << "Elapsed:" << endPoint.count() << std::endl;
-    }
-
 private:
     std::chrono::high_resolution_clock::time_point m_startPoint;
-    std::ostream& m_os;
 };
 
 class Process
@@ -60,68 +53,85 @@ private:
     }
 };
 
-static constexpr int repeat{ 500 };
+static constexpr int repeat{ 100'000'000 };
+std::string text{ "Hello world" };
+
+void PerformConstStringRefBenchmark(int count)
+{
+    std::cout << "const std::string&\n";
+
+    Process process;
+
+    std::chrono::duration<double> minDuration = std::chrono::duration<double>::max();
+
+    StopWatch sw;
+
+    for (int i = 0; i < count; i++)
+    {
+        process.ConstRefString(text);
+    }
+    const auto duration = sw.Stop();
+    if (duration < minDuration)
+    {
+        minDuration = duration;
+    }
+    std::cout << (int)process.ch << '\n';
+
+    std::cout << minDuration.count() << '\n';
+}
+
+void PerformStringViewBenchmark(int count)
+{
+    std::cout << "std::string_view\n";
+
+    Process process;
+
+    std::chrono::duration<double> minDuration = std::chrono::duration<double>::max();
+
+    StopWatch sw;
+
+    for (int i = 0; i < count; i++)
+    {
+        process.StringView(text);
+    }
+    const auto duration = sw.Stop();
+    if (duration < minDuration)
+    {
+        minDuration = duration;
+    }
+    std::cout << (int)process.ch << '\n';
+
+    std::cout << minDuration.count() << '\n';
+}
+
+void PerformBoostStringViewBenchmark(int count)
+{
+    std::cout << "boost::string_view\n";
+
+    Process process;
+
+    std::chrono::duration<double> minDuration = std::chrono::duration<double>::max();
+
+    StopWatch sw;
+
+    for (int i = 0; i < count; i++)
+    {
+        process.BoostStringView(text);
+    }
+    const auto duration = sw.Stop();
+    if (duration < minDuration)
+    {
+        minDuration = duration;
+    }
+    std::cout << (int)process.ch << '\n';
+
+    std::cout << minDuration.count() << '\n';
+}
+
 
 int main()
 {
-    std::string text{ "Hello world" };
-
-    for (int n = 0; n < 10; ++n)
-    {
-        {
-            std::cout << "const std::string&\n";
-
-            Process process;
-
-            StopWatch sw;
-
-            for (int i = 0; i <= repeat; i++)
-            {
-                for (int j = 0; j <= repeat; j++)
-                {
-                    process.ConstRefString(text);
-                }
-            }
-            sw.Stop();
-            std::cout << (int)process.ch << '\n';
-        }
-
-        {
-            std::cout << "\nstd::string_view\n";
-
-            Process process;
-
-            StopWatch sw;
-
-            for (int i = 0; i <= repeat; i++)
-            {
-                for (int j = 0; j <= repeat; j++)
-                {
-                    process.StringView(text);
-                }
-            }
-            sw.Stop();
-            std::cout << (int)process.ch << '\n';
-        }
-
-        {
-            std::cout << "\nboost::string_view\n";
-
-            Process process;
-
-            StopWatch sw;
-
-            for (int i = 0; i <= repeat; i++)
-            {
-                for (int j = 0; j <= repeat; j++)
-                {
-                    process.BoostStringView(text);
-                }
-            }
-            sw.Stop();
-            std::cout << (int)process.ch << '\n';
-        }
-
-        std::cout << "\n***********************\n";
-    }
+    PerformConstStringRefBenchmark(repeat);
+    PerformStringViewBenchmark(repeat);
+    PerformBoostStringViewBenchmark(repeat);
 }
