@@ -14,8 +14,8 @@ Also, different return types are bechmarked:
 ## Results
 Code was run on:
 - Visual Studio 2022 (Version 17.8.3), x64 Release mode (my private machine)
-- gcc 13.12 with ```-Ofast``` flag (https://godbolt.org/z/3nzsfo59M)
-- clang 17.0.1 with ```-Ofast``` flag (https://godbolt.org/z/1z6n84GzP)
+- gcc 13.12 with ```-Ofast``` flag (https://godbolt.org/z/qTej8q9fT)
+- clang 17.0.1 with ```-Ofast``` flag (https://godbolt.org/z/5e8P89Pfa)
 
 Typical timings are shown below.
 
