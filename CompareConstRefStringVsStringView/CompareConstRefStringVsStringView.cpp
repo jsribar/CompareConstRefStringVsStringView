@@ -7,6 +7,7 @@
 #include <chrono>
 #include <iostream>
 #include <string_view>
+#include <type_traits>
 
 #include <boost/utility/string_view.hpp>
 
@@ -84,7 +85,14 @@ std::pair<double, int> ArgumentBechmark(int count, const Array& array)
         for (int i = 0; i < repeat; i++)
         {
             // Access strings interchangably to minimize or avoid caching or optimizations.
-            process.template ProcessString<Str>(array[i % array.size()]);
+            if constexpr(std::is_same_v<Str, std::string> && std::is_same_v<Array, const std::array<boost::string_view, 6>>)
+            {
+                process.template ProcessString<Str>(Str(array[i % array.size()]));
+            }
+            else
+            {
+                process.template ProcessString<Str>(array[i % array.size()]);
+            }
         }
         if (const auto duration = sw.Stop(); duration < minDuration)
         {
@@ -135,16 +143,20 @@ void DoArgumentsBenchmark(int count)
     auto BenchmarkStringViewStringArray = ArgumentBechmark<std::string_view, decltype(string_array)>;
     auto BenchmarkConstStringViewRefStringArray = ArgumentBechmark<const std::string_view&, decltype(string_array)>;
     auto BenchmarkBoostStringViewStringArray = ArgumentBechmark<boost::string_view, decltype(string_array)>;
+    
+    auto BenchmarkStdStringViewStringViewArray = ArgumentBechmark<std::string, decltype(string_view_array)>;
 
     double constStringRefDuration = 0;
     double stringViewDuration = 0;
     double constStringViewRefDuration = 0;
     double boostStringViewDuration = 0;
+    double stringFromStringViewDuration = 0;
 
     int resultConstStringRef = 127;
     int resultStringView = 127;
     int resultConstStringViewRef = 127;
     int resultBoostStringView = 127;
+    int resultStringFromStringView = 127;
 
     for (int i = 0; i < loops; ++i)
     {
@@ -173,7 +185,19 @@ void DoArgumentsBenchmark(int count)
             resultBoostStringView %= ch;
             resultBoostStringView += 15;
         }
+        {
+            auto [duration, ch] = BenchmarkStdStringViewStringViewArray(count, string_view_array);
+            stringFromStringViewDuration += duration;
+            resultStringFromStringView %= ch;
+            resultStringFromStringView += 15;
+        }
         // Repeat benchmark for each parameter type in reverse order
+        {
+            auto [duration, ch] = BenchmarkStdStringViewStringViewArray(count, string_view_array);
+            stringFromStringViewDuration += duration;
+            resultStringFromStringView %= ch;
+            resultStringFromStringView += 15;
+        }
         {
             auto [duration, ch] = BenchmarkBoostStringViewStringArray(count, string_array);
             boostStringViewDuration += duration;
@@ -208,6 +232,8 @@ void DoArgumentsBenchmark(int count)
     std::cout << resultConstStringViewRef << '\n';
     std::cout << "boost::string_view: " << boostStringViewDuration << "\n";
     std::cout << resultBoostStringView << '\n';
+    std::cout << "std::string from boost::string_view array: " << stringFromStringViewDuration << "\n";
+    std::cout << resultStringFromStringView << '\n';
 }
 
 void DoReturnValueBenchmark(int count)
