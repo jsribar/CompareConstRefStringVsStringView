@@ -84,7 +84,7 @@ std::pair<double, int> ArgumentBechmark(int count, const Array& array)
         for (int i = 0; i < repeat; i++)
         {
             // Access strings interchangably to minimize or avoid caching or optimizations.
-            process.ProcessString(array[i % array.size()]);
+            process.template ProcessString<Str>(array[i % array.size()]);
         }
         if (const auto duration = sw.Stop(); duration < minDuration)
         {
