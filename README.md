@@ -14,8 +14,8 @@ Also, different return types are bechmarked:
 ## Results
 Code was run on:
 - Visual Studio 2022 (Version 17.8.3), x64 Release mode (my private machine)
-- gcc 13.12 with ```-Ofast``` flag (https://godbolt.org/z/qTej8q9fT)
-- clang 17.0.1 with ```-Ofast``` flag (https://godbolt.org/z/5e8P89Pfa)
+- gcc 13.12 with ```-Ofast``` flag (https://godbolt.org/z/G5eq65a1o)
+- clang 17.0.1 with ```-Ofast``` flag (https://godbolt.org/z/cehvc5YY7)
 
 Typical timings are shown below.
 
@@ -73,4 +73,4 @@ Typical timings are shown below.
 
 
 ## Conclusion
-Relative differences in timings for different parameter and return value types are usually less then per mille.
+Relative differences in timings for different parameter and return value types are usually less then per mille except when constructor od std::string is invoked (corresponding values are not shown in tables above).
