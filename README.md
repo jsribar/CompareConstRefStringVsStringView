@@ -20,7 +20,7 @@ Also, different return types are bechmarked:
 Code was run on:
 - Visual Studio 2022 (Version 17.8.3), x64 Release mode (my private machine)
 - gcc 13.12 with ```-Ofast``` flag (https://godbolt.org/z/P3h3PTWYj)
-- clang 17.0.1 with ```-Ofast``` flag (https://godbolt.org/z/cehvc5YY7)
+- clang 17.0.1 with ```-Ofast``` flag (https://godbolt.org/z/66ddddKcd)
 
 Typical timings are shown below.
 
