@@ -61,7 +61,7 @@ Typical timings are shown below.
 
 ### Different return types
 #### Visual Studio
-| Return type                     | Argument type            | Time measured |
+| Return type                     | Local type               | Time measured |
 |---------------------------------|--------------------------|---------------|
 | ```const std::string&```        | ```std::string```        | 0.0005700     |
 | ```std::string_view```          | ```std::string```        | 0.0005697     |
@@ -69,7 +69,7 @@ Typical timings are shown below.
 | ```boost::string_view```        | ```boost::string_view``` | 0.0005752     |
 | ```const boost::string_view&``` | ```boost::string_view``` | 0.0005750     |
 #### gcc
-| Return type                     | Argument type            | Time measured |
+| Return type                     | Local type               | Time measured |
 |---------------------------------|--------------------------|---------------|
 | ```const std::string&```        | ```std::string```        | 0.00055094    |
 | ```std::string_view```          | ```std::string```        | 0.000550952   |
@@ -77,7 +77,7 @@ Typical timings are shown below.
 | ```boost::string_view```        | ```boost::string_view``` | 0.00055093    |
 | ```const boost::string_view&``` | ```boost::string_view``` | 0.00055094    |
 #### clang
-| Return type                     | Argument type            | Time measured |
+| Return type                     | Local type               | Time measured |
 |---------------------------------|--------------------------|---------------|
 | ```const std::string&```        | ```std::string```        | 0.000560791   |
 | ```std::string_view```          | ```std::string```        | 0.000559871   |
