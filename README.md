@@ -2,9 +2,14 @@
 
 A simple benchmark that compares the speed of passing string to a method:
 - as ```const std::string&```
+- as ```std::string```
 - as ```std::string_view```
 - as ```const std::string_view&```
 - as ```boost::string_view```
+Arguments are taken from:
+- ```std::string```
+- ```boost::string_view```
+- ```const char*```
 
 Also, different return types are bechmarked:
 - return ```const std::string&```
@@ -14,63 +19,71 @@ Also, different return types are bechmarked:
 ## Results
 Code was run on:
 - Visual Studio 2022 (Version 17.8.3), x64 Release mode (my private machine)
-- gcc 13.12 with ```-Ofast``` flag (https://godbolt.org/z/G5eq65a1o)
+- gcc 13.12 with ```-Ofast``` flag (https://godbolt.org/z/P3h3PTWYj)
 - clang 17.0.1 with ```-Ofast``` flag (https://godbolt.org/z/cehvc5YY7)
 
 Typical timings are shown below.
 
-### Visual Studio
-#### Different parameter types
-| Parameter types         | Time measured |
-|-------------------------|---------------|
-| ```const std::string&```      | 0.0014311   |
-| ```std::string_view```        | 0.0014298   |
-| ```const std::string_view&``` | 0.0014300   |
-| ```boost::string_view```      | 0.0014304   |
-#### Different return types
-| Return types             | Time measured |
-|--------------------------|---------------|
-| ```const std::string&``` | 0.0009508 |
-| ```std::string_view```   | 0.0009513 |
-| ```boost::string_view``` | 0.0009499 |
-| ```boost::string_view2``` | 0.0009617 |
-| ```const boost::string_view&``` | 0.0009675 |
+### Different parameter types
+#### Visual Studio
+| Parameter type                | Argument type            | Time measured |
+|-------------------------------|--------------------------|---------------|
+| ```const std::string&```      | ```std::string```        | 0.0005871     |
+| ```std::string_view```        | ```std::string```        | 0.0005866     |
+| ```const std::string_view&``` | ```std::string```        | 0.0005869     |
+| ```boost::string_view```      | ```std::string```        | 0.0005876     |
+| ```std::string```             | ```boost::string_view``` | **0.0020685** |
+| ```const std::string&```      | ```const char*```        | **0.002035** |
+| ```std::string```             | ```const char*```        | **0.0020342** |
+| ```boost::string_view```      | ```const char*```        | 0.0005944     |
+#### gcc
+| Parameter type                | Argument type            | Time measured  |
+|-------------------------------|--------------------------|----------------|
+| ```const std::string&```      | ```std::string```        | 0.000601113    |
+| ```std::string_view```        | ```std::string```        | 0.000601281    |
+| ```const std::string_view&``` | ```std::string```        | 0.000601274    |
+| ```boost::string_view```      | ```std::string```        | 0.000601232    |
+| ```std::string```             | ```boost::string_view``` | **0.00151555** |
+| ```const std::string&```      | ```const char*```        | **0.00209719** |
+| ```std::string```             | ```const char*```        | **0.00206175** |
+| ```boost::string_view```      | ```const char*```        | 0.000600982    |
+#### clang
+| Parameter type                | Argument type            | Time measured   |
+|-------------------------------|--------------------------|-----------------|
+| ```const std::string&```      | ```std::string```        | 0.000767679     |
+| ```std::string_view```        | ```std::string```        | 0.00077255      |
+| ```const std::string_view&``` | ```std::string```        | 0.000775012     |
+| ```boost::string_view```      | ```std::string```        | 0.000765972     |
+| ```std::string```             | ```boost::string_view``` | **0.000893587** |
+| ```const std::string&```      | ```const char*```        | **0.00137083**  |
+| ```std::string```             | ```const char*```        | **0.00137587**  |
+| ```boost::string_view```      | ```const char*```        | 0.000767388     |
 
-
-### gcc
-#### Different parameter types
-| Parameter types         | Time measured |
-|-------------------------|---------------|
-| ```const std::string&```      | 0.00166879   |
-| ```std::string_view```        | 0.00162398   |
-| ```const std::string_view&``` | 0.00164239    |
-| ```boost::string_view```      | 0.00164594   |
-#### Different return types
-| Return types            | Time measured |
-|-------------------------|---------------|
-| ```const std::string&``` | 0.000917671 |
-| ```std::string_view``` | 0.000917651 |
-| ```boost::string_view``` | 0.000917702 |
-| ```boost::string_view2``` | 0.00091768 |
-| ```const boost::string_view&``` | 0.00091767 |
-
-### clang
-#### Different parameter types
-| Parameter types         | Time measured |
-|-------------------------|---------------|
-| ```const std::string&```      | 0.00147693   |
-| ```std::string_view```        | 0.00138438   |
-| ```const std::string_view&``` | 0.00138049   |
-| ```boost::string_view```      | 0.00138044   |
-#### Different return types
-| Return types            | Time measured |
-|-------------------------|---------------|
-| ```const std::string&``` | 0.000918258 |
-| ```std::string_view``` | 0.000918149 |
-| ```boost::string_view``` | 0.000917973 |
-| ```boost::string_view2``` | 0.000918066 |
-| ```const boost::string_view&``` | 0.000918127 |
-
+### Different return types
+#### Visual Studio
+| Return type                     | Argument type            | Time measured |
+|---------------------------------|--------------------------|---------------|
+| ```const std::string&```        | ```std::string```        | 0.0005700     |
+| ```std::string_view```          | ```std::string```        | 0.0005697     |
+| ```boost::string_view```        | ```std::string```        | 0.0005697     |
+| ```boost::string_view```        | ```boost::string_view``` | 0.0005752     |
+| ```const boost::string_view&``` | ```boost::string_view``` | 0.0005750     |
+#### gcc
+| Return type                     | Argument type            | Time measured |
+|---------------------------------|--------------------------|---------------|
+| ```const std::string&```        | ```std::string```        | 0.00055094    |
+| ```std::string_view```          | ```std::string```        | 0.000550952   |
+| ```boost::string_view```        | ```std::string```        | 0.00055096    |
+| ```boost::string_view```        | ```boost::string_view``` | 0.00055093    |
+| ```const boost::string_view&``` | ```boost::string_view``` | 0.00055094    |
+#### clang
+| Return type                     | Argument type            | Time measured |
+|---------------------------------|--------------------------|---------------|
+| ```const std::string&```        | ```std::string```        | 0.000560791   |
+| ```std::string_view```          | ```std::string```        | 0.000559871   |
+| ```boost::string_view```        | ```std::string```        | 0.00056079    |
+| ```boost::string_view```        | ```boost::string_view``` | 0.000560781   |
+| ```const boost::string_view&``` | ```boost::string_view``` | 0.000561132   |
 
 ## Conclusion
-Relative differences in timings for different parameter and return value types are usually less then per mille except when constructor od std::string is invoked (corresponding values are not shown in tables above).
+Contrary to popular belief that for string_view type parameter arguments are passed faster, relative differences in timings measured for different parameter and return value types are usually less then per mille **except** when constructor od std::string is invoked (corresponding values are not shown in tables above).
