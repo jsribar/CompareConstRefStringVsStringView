@@ -86,4 +86,4 @@ Typical timings are shown below.
 | ```const boost::string_view&``` | ```boost::string_view``` | 0.000561132   |
 
 ## Conclusion
-Contrary to popular belief that for string_view type parameter arguments are passed faster, relative differences in timings measured for different parameter and return value types are usually less then per mille **except** when constructor od std::string is invoked (corresponding values are not shown in tables above).
+Contrary to popular belief that for ```string_view``` parameter type argument is passed faster, relative differences in timings measured for different parameter and return value types are usually less then per mille **except** when constructor od std::string is invoked (corresponding values are bold in tables above).
