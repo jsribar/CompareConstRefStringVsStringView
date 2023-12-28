@@ -13,9 +13,11 @@ Arguments are taken from:
 - ```const char*```
 
 Also, different return types are bechmarked:
-- return ```const std::string&```
-- return ```std::string_view```
-- return ```boost::string_view```
+- ```const std::string&```
+- ```std::string_view```
+- ```boost::string_view```
+
+for ```std::string``` and ```boost::string_view``` local types.
 
 ## Results
 Code was run on:
@@ -34,7 +36,7 @@ Typical timings are shown below.
 | ```const std::string_view&``` | ```std::string```        | 0.0005869     |
 | ```boost::string_view```      | ```std::string```        | 0.0005876     |
 | ```std::string```             | ```boost::string_view``` | **0.0020685** |
-| ```const std::string&```      | ```const char*```        | **0.002035** |
+| ```const std::string&```      | ```const char*```        | **0.002035**  |
 | ```std::string```             | ```const char*```        | **0.0020342** |
 | ```boost::string_view```      | ```const char*```        | 0.0005944     |
 #### gcc
