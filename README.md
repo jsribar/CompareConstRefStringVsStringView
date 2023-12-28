@@ -6,6 +6,7 @@ A simple benchmark that compares the speed of passing string to a method:
 - as ```std::string_view```
 - as ```const std::string_view&```
 - as ```boost::string_view```
+
 Arguments are taken from:
 - ```std::string```
 - ```boost::string_view```
