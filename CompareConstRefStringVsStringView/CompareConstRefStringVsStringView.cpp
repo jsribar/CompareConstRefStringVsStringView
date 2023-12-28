@@ -270,21 +270,21 @@ void DoArgumentsBenchmark(int count)
         }
     }
 
-    std::cout << "const std::string& on std::string array: " << constStringRefOnStringArrayDuration << "\n";
+    std::cout << "const std::string& from std::string: " << constStringRefOnStringArrayDuration << "\n";
     std::cout << resultConstStringRefOnStringArray << '\n';
-    std::cout << "std::string_view on std::string array: " << stringViewOnStringArrayDuration << "\n";
+    std::cout << "std::string_view from std::string: " << stringViewOnStringArrayDuration << "\n";
     std::cout << resultStringViewOnStringArray << '\n';
-    std::cout << "const std::string_view& on std::string array: " << constStringViewRefOnStringArrayDuration << "\n";
+    std::cout << "const std::string_view& from std::string: " << constStringViewRefOnStringArrayDuration << "\n";
     std::cout << resultConstStringViewRefOnStringArray << '\n';
-    std::cout << "boost::string_view on std::string array: " << boostStringViewOnStringArrayDuration << "\n";
+    std::cout << "boost::string_view from std::string: " << boostStringViewOnStringArrayDuration << "\n";
     std::cout << resultBoostStringViewOnStringArray << '\n';
-    std::cout << "std::string on boost::string_view array: " << stringOnStringViewArrayDuration << "\n";
+    std::cout << "std::string from boost::string_view: " << stringOnStringViewArrayDuration << "\n";
     std::cout << resultStringOnStringViewArray << '\n';
-    std::cout << "const std::string& on const char* array: " << constStringRefOnConstCharArrayDuration << "\n";
+    std::cout << "const std::string& from const char*: " << constStringRefOnConstCharArrayDuration << "\n";
     std::cout << resultConstStringRefOnConstCharArray << '\n';
-    std::cout << "std::string on const char* array: " << stringOnConstCharArrayDuration << "\n";
+    std::cout << "std::string from const char*: " << stringOnConstCharArrayDuration << "\n";
     std::cout << resultStringOnConstCharArray << '\n';
-    std::cout << "boost::string_view on const char* array: " << boostStringViewOnConstCharArrayDuration << "\n";
+    std::cout << "boost::string_view from const char*: " << boostStringViewOnConstCharArrayDuration << "\n";
     std::cout << resultBoostStringViewOnConstCharArray << '\n';
 }
 
@@ -292,102 +292,102 @@ void DoReturnValueBenchmark(int count)
 {
     std::cout << "\n*** Different return value types:\n\n";
 
-    auto BenchmarkConstStringRefStringArray = ReturnValueBechmarkStringArray<const std::string&, decltype(string_array)>;
+    auto BenchmarkConstStringRefFromString = ReturnValueBechmarkStringArray<const std::string&, decltype(string_array)>;
     auto BenchmarkStringViewStringArray = ReturnValueBechmarkStringArray<std::string_view, decltype(string_array)>;
     auto BenchmarkBoostStringViewStringArray = ReturnValueBechmarkStringArray<boost::string_view, decltype(string_array)>;
     auto BenchmarkBoostStringViewStringViewArray = ReturnValueBechmarkStringArray<boost::string_view, decltype(string_view_array)>;
     auto BenchmarkConstBoostStringViewRefStringViewArray = ReturnValueBechmarkStringArray<const boost::string_view&, decltype(string_view_array)>;
 
-    double constStringRefDuration = 0;
-    double stringViewDuration = 0;
-    double boostStringViewDuration = 0;
+    double constStringRefFromStringDuration = 0;
+    double stringViewFromStringDuration = 0;
+    double boostStringViewFromStringDuration = 0;
 
-    double boostStringViewDuration2 = 0;
-    double constBoostStringViewRefDuration = 0;
+    double boostStringViewFromBoostStringViewDuration = 0;
+    double constBoostStringViewRefFromBoostStringViewDuration = 0;
 
-    int resultConstStringRef = 127;
-    int resultStringView = 127;
-    int resultBoostStringView = 127;
+    int resultConstStringRefFromString = 127;
+    int resultStringViewFromString = 127;
+    int resultBoostStringViewFromString = 127;
 
-    int resultBoostStringView2 = 127;
-    int resultConstBoostStringViewRef = 127;
+    int resultBoostStringViewFromBoostStringView = 127;
+    int resultConstBoostStringViewRefFromBoostStringView = 127;
 
     for (int i = 0; i < loops; ++i)
     {
         // Do benchmark for each parameter type. Result of dummy processing is included to avoid optimizing it out.
         {
-            const auto [duration, ch] = BenchmarkConstStringRefStringArray(count, string_array);
-            constStringRefDuration += duration;
-            resultConstStringRef %= ch;
-            resultConstStringRef += 15;
+            const auto [duration, ch] = BenchmarkConstStringRefFromString(count, string_array);
+            constStringRefFromStringDuration += duration;
+            resultConstStringRefFromString %= ch;
+            resultConstStringRefFromString += 15;
         }
         {
             const auto [duration, ch] = BenchmarkStringViewStringArray(count, string_array);
-            stringViewDuration += duration;
-            resultStringView %= ch;
-            resultStringView += 15;
+            stringViewFromStringDuration += duration;
+            resultStringViewFromString %= ch;
+            resultStringViewFromString += 15;
         }
         {
             auto [duration, ch] = BenchmarkBoostStringViewStringArray(count, string_array);
-            boostStringViewDuration += duration;
-            resultBoostStringView %= ch;
-            resultBoostStringView += 15;
+            boostStringViewFromStringDuration += duration;
+            resultBoostStringViewFromString %= ch;
+            resultBoostStringViewFromString += 15;
         }
         {
             auto [duration, ch] = BenchmarkBoostStringViewStringViewArray(count, string_view_array);
-            boostStringViewDuration2 += duration;
-            resultBoostStringView2 %= ch;
-            resultBoostStringView2 += 15;
+            boostStringViewFromBoostStringViewDuration += duration;
+            resultBoostStringViewFromBoostStringView %= ch;
+            resultBoostStringViewFromBoostStringView += 15;
         }
         {
             auto [duration, ch] = BenchmarkConstBoostStringViewRefStringViewArray(count, string_view_array);
-            constBoostStringViewRefDuration += duration;
-            resultConstBoostStringViewRef %= ch;
-            resultConstBoostStringViewRef += 15;
+            constBoostStringViewRefFromBoostStringViewDuration += duration;
+            resultConstBoostStringViewRefFromBoostStringView %= ch;
+            resultConstBoostStringViewRefFromBoostStringView += 15;
         }
         // Repeat benchmark for each parameter type in reverse order
         {
             auto [duration, ch] = BenchmarkConstBoostStringViewRefStringViewArray(count, string_view_array);
-            constBoostStringViewRefDuration += duration;
-            resultConstBoostStringViewRef %= ch;
-            resultConstBoostStringViewRef += 15;
+            constBoostStringViewRefFromBoostStringViewDuration += duration;
+            resultConstBoostStringViewRefFromBoostStringView %= ch;
+            resultConstBoostStringViewRefFromBoostStringView += 15;
         }
         {
             auto [duration, ch] = BenchmarkBoostStringViewStringViewArray(count, string_view_array);
-            boostStringViewDuration2 += duration;
-            resultBoostStringView2 %= ch;
-            resultBoostStringView2 += 15;
+            boostStringViewFromBoostStringViewDuration += duration;
+            resultBoostStringViewFromBoostStringView %= ch;
+            resultBoostStringViewFromBoostStringView += 15;
         }
         {
             auto [duration, ch] = BenchmarkBoostStringViewStringArray(count, string_array);
-            boostStringViewDuration += duration;
-            resultBoostStringView %= ch;
-            resultBoostStringView += 15;
+            boostStringViewFromStringDuration += duration;
+            resultBoostStringViewFromString %= ch;
+            resultBoostStringViewFromString += 15;
         }
         {
             const auto [duration, ch] = BenchmarkStringViewStringArray(count, string_array);
-            stringViewDuration += duration;
-            resultStringView %= ch;
-            resultStringView += 15;
+            stringViewFromStringDuration += duration;
+            resultStringViewFromString %= ch;
+            resultStringViewFromString += 15;
         }
         {
-            const auto [duration, ch] = BenchmarkConstStringRefStringArray(count, string_array);
-            constStringRefDuration += duration;
-            resultConstStringRef %= ch;
-            resultConstStringRef += 15;
+            const auto [duration, ch] = BenchmarkConstStringRefFromString(count, string_array);
+            constStringRefFromStringDuration += duration;
+            resultConstStringRefFromString %= ch;
+            resultConstStringRefFromString += 15;
         }
     }
 
-    std::cout << "const std::string&: " << constStringRefDuration << "\n";
-    std::cout << resultConstStringRef << '\n';
-    std::cout << "std::string_view: " << stringViewDuration << "\n";
-    std::cout << resultStringView << '\n';
-    std::cout << "boost::string_view: " << boostStringViewDuration << "\n";
-    std::cout << resultBoostStringView << '\n';
-    std::cout << "boost::string_view2: " << boostStringViewDuration2 << "\n";
-    std::cout << resultBoostStringView2 << '\n';
-    std::cout << "const boost::string_view&: " << constBoostStringViewRefDuration << "\n";
-    std::cout << resultConstBoostStringViewRef << '\n';
+    std::cout << "const std::string& from std::string: " << constStringRefFromStringDuration << "\n";
+    std::cout << resultConstStringRefFromString << '\n';
+    std::cout << "std::string_view from std::string: " << stringViewFromStringDuration << "\n";
+    std::cout << resultStringViewFromString << '\n';
+    std::cout << "boost::string_view from std::string: " << boostStringViewFromStringDuration << "\n";
+    std::cout << resultBoostStringViewFromString << '\n';
+    std::cout << "boost::string_view from boost::string_view: " << boostStringViewFromBoostStringViewDuration << "\n";
+    std::cout << resultBoostStringViewFromBoostStringView << '\n';
+    std::cout << "const boost::string_view& from boost::string_view: " << constBoostStringViewRefFromBoostStringViewDuration << "\n";
+    std::cout << resultConstBoostStringViewRefFromBoostStringView << '\n';
 }
 
 int main()
